@@ -651,6 +651,189 @@ result.fold(
 - ✅ Biometric authentication
 - ✅ Local notifications
 - ✅ Firebase Messaging (optional)
+- ✅ Responsive design support
+
+## 📱 Responsive Design
+
+The project uses the `responsive_framework` package for responsive design support across different screen sizes and orientations.
+
+### Orientation Support
+
+The app supports both **portrait** and **landscape** orientations on all devices. Layouts automatically adapt based on screen size and orientation.
+
+### Breakpoints
+
+The app defines the following breakpoints (configured in `main.dart`):
+- **Mobile**: 0 - 450px
+- **Tablet**: 451 - 800px
+- **Desktop**: 801 - 1920px
+- **4K**: 1921px and above
+
+### Usage
+
+Use the `AppResponsive` utility class for responsive design:
+
+```dart
+import 'package:cp/core/utils/responsive_utils.dart';
+
+// Check screen type
+final isMobile = AppResponsive.isMobile(context);
+final isTablet = AppResponsive.isTablet(context);
+final isDesktop = AppResponsive.isDesktop(context);
+
+// Check orientation
+final isLandscape = AppResponsive.isLandscape(context);
+final isPortrait = AppResponsive.isPortrait(context);
+final isCompact = AppResponsive.isCompactLayout(context);
+
+// Get responsive values
+final padding = AppResponsive.responsivePadding(
+  context,
+  mobile: EdgeInsets.all(16),
+  tablet: EdgeInsets.all(24),
+  desktop: EdgeInsets.all(32),
+);
+
+// Get orientation-aware padding
+final paddingWithOrientation = AppResponsive.responsivePaddingWithOrientation(
+  context,
+  mobilePortrait: EdgeInsets.all(16),
+  mobileLandscape: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+  tabletPortrait: EdgeInsets.all(24),
+  tabletLandscape: EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+);
+
+final fontSize = AppResponsive.responsiveFontSize(
+  context,
+  mobile: 16,
+  tablet: 18,
+  desktop: 20,
+);
+
+// Get responsive grid columns (with orientation support)
+final columns = AppResponsive.responsiveGridColumns(
+  context,
+  mobile: 1,
+  tablet: 2,
+  desktop: 3,
+  mobileLandscape: 2,  // More columns in landscape
+  tabletLandscape: 3,  // More columns in landscape
+  desktopLandscape: 4, // More columns in landscape
+);
+```
+
+### Available Methods
+
+#### Screen Type Detection
+- `isMobile(BuildContext)` - Check if screen is mobile
+- `isTablet(BuildContext)` - Check if screen is tablet
+- `isDesktop(BuildContext)` - Check if screen is desktop
+- `getBreakpoint(BuildContext)` - Get current breakpoint name
+
+#### Orientation Detection
+- `isLandscape(BuildContext)` - Check if landscape orientation
+- `isPortrait(BuildContext)` - Check if portrait orientation
+- `isCompactLayout(BuildContext)` - Check if device should use compact layout
+
+#### Responsive Values
+- `responsiveValue<T>(...)` - Get responsive value based on screen size
+- `responsiveValueWithOrientation<T>(...)` - Get responsive value considering both screen size and orientation
+- `responsivePadding(...)` - Get responsive padding
+- `responsivePaddingWithOrientation(...)` - Get responsive padding that adapts to orientation
+- `responsiveFontSize(...)` - Get responsive font size
+- `responsiveGridColumns(...)` - Get responsive grid column count (with orientation support)
+- `responsiveMaxWidth(...)` - Get responsive max width for content
+- `responsiveSpacing(...)` - Get responsive spacing
+
+#### Screen Dimensions
+- `screenWidth(BuildContext)` - Get screen width
+- `screenHeight(BuildContext)` - Get screen height
+- `effectiveWidth(BuildContext)` - Get effective screen width
+- `effectiveHeight(BuildContext)` - Get effective screen height
+
+### Examples
+
+#### Conditional Layout with Orientation Support
+```dart
+final isDesktop = AppResponsive.isDesktop(context);
+final isTablet = AppResponsive.isTablet(context);
+final isLandscape = AppResponsive.isLandscape(context);
+
+// On desktop or tablet in landscape, use sidebar layout
+if (isDesktop || (isTablet && isLandscape)) {
+  return Row(
+    children: [
+      Sidebar(),
+      Expanded(child: Content()),
+    ],
+  );
+} else {
+  // Mobile/Tablet in portrait, use tabs
+  return TabBarView(...);
+}
+```
+
+#### Responsive Grid with Orientation
+```dart
+GridView.builder(
+  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: AppResponsive.responsiveGridColumns(
+      context,
+      mobile: 1,
+      tablet: 2,
+      desktop: 3,
+      mobileLandscape: 2,  // 2 columns in landscape
+      tabletLandscape: 3,  // 3 columns in landscape
+      desktopLandscape: 4, // 4 columns in landscape
+    ),
+    childAspectRatio: AppResponsive.isLandscape(context) ? 1.5 : 1.2,
+  ),
+  itemBuilder: (context, index) => Item(),
+)
+```
+
+#### Orientation-Aware Padding
+```dart
+Padding(
+  padding: AppResponsive.responsivePaddingWithOrientation(
+    context,
+    mobilePortrait: EdgeInsets.all(16),
+    mobileLandscape: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+    tabletPortrait: EdgeInsets.all(24),
+    tabletLandscape: EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+  ),
+  child: Content(),
+)
+```
+
+#### Responsive Text
+```dart
+Text(
+  'Hello',
+  style: TextStyle(
+    fontSize: AppResponsive.responsiveFontSize(
+      context,
+      mobile: 16,
+      tablet: 18,
+      desktop: 20,
+    ),
+  ),
+)
+```
+
+#### Compact Layout Detection
+```dart
+final isCompact = AppResponsive.isCompactLayout(context);
+
+TabBar(
+  tabs: [
+    Tab(
+      icon: Icon(Icons.home),
+      text: isCompact ? null : 'Home', // Hide text in compact mode
+    ),
+  ],
+)
+```
 
 ## 📝 Code Generation
 

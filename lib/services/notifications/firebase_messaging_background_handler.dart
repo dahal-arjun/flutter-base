@@ -7,4 +7,3 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('Background message handler: ${message.messageId}');
   // Handle background messages here
 }
-

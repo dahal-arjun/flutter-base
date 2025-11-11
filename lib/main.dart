@@ -16,7 +16,7 @@ import 'services/theme/theme_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Set preferred orientations (optional)
+  // Lock app to portrait orientation only (disable landscape)
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
