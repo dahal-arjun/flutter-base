@@ -53,7 +53,12 @@ class ConnectivityService {
     if (_currentStatus != newStatus) {
       _currentStatus = newStatus;
       _controller.add(newStatus);
-      AppLogger.d('Network status changed', {'status': newStatus.toString()});
+      // Log network status changes (simplified format)
+      // Only log the status name, not the full object
+      final statusName = newStatus == NetworkStatus.online
+          ? 'online'
+          : 'offline';
+      AppLogger.i('Network status: $statusName');
     }
   }
 

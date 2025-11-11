@@ -79,14 +79,19 @@ Future<void> setupDependencyInjection() async {
   getIt.registerLazySingleton<Box>(() => hiveBox);
 
   // Storage Services
+  // Register HiveStorageService first (needed as fallback for SecureStorageService)
+  getIt.registerLazySingleton<HiveStorageService>(
+    () => HiveStorageService(getIt<Box>()),
+  );
   getIt.registerLazySingleton<FlutterSecureStorage>(
     () => const FlutterSecureStorage(),
   );
+  // Provide Hive storage as fallback for macOS development (when secure storage fails)
   getIt.registerLazySingleton<SecureStorageService>(
-    () => SecureStorageService(getIt<FlutterSecureStorage>()),
-  );
-  getIt.registerLazySingleton<HiveStorageService>(
-    () => HiveStorageService(getIt<Box>()),
+    () => SecureStorageService(
+      getIt<FlutterSecureStorage>(),
+      fallbackStorage: getIt<HiveStorageService>(),
+    ),
   );
 
   // Language Service
