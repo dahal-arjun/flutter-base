@@ -93,9 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             ),
             // Content area - show selected page
-            Expanded(
-              child: _getPageForIndex(_selectedIndex),
-            ),
+            Expanded(child: _getPageForIndex(_selectedIndex)),
           ],
         ),
       );
